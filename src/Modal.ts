@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from "@angular/core";
 
 @Component({
