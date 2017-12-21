@@ -26,14 +26,12 @@ export class ModalFooter { }
      role="dialog"
      #modalRoot
      (keydown.esc)="closeOnEscape ? close() : 0"
-     [ngClass]="{ in: isOpened, fade: isOpened }"
      [ngStyle]="{ display: isOpened ? 'block' : 'none' }"
-     (click)="closeOnOutsideClick ? close() : 0">
-    <div [class]="'modal-dialog ' + modalClass" (click)="preventClosing($event)">
+     (click)="closeOnOutsideClick ? close() : 0"
+     >
+    <div class="modal-dialog {{ modelClass }}" [ngStyle]="modalStyle" (click)="preventClosing($event)">
         <div class="modal-content" tabindex="0" *ngIf="isOpened">
-            <div class="modal-header">
-                <ng-content select="modal-header"></ng-content>
-            </div>
+            <ng-content select="modal-header"></ng-content>
             <div class="modal-body">
                 <ng-content select="modal-content"></ng-content>
             </div>
@@ -52,6 +50,9 @@ export class Modal {
 
   @Input()
   public modalClass: string;
+
+  @Input()
+  public modalStyle: any;
 
   @Input()
   public closeOnEscape: boolean = true;
