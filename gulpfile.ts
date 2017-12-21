@@ -1,3 +1,4 @@
+/* tslint:disable */
 import {Gulpclass, Task, SequenceTask, MergedTask} from "gulpclass";
 
 const gulp = require("gulp");
