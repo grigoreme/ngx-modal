@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { Modal, ModalHeader, ModalContent, ModalFooter } from "./Modal";
 import { RouteModal } from "./RouteModal";
 import { NgModule } from "@angular/core";
