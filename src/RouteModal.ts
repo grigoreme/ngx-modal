@@ -1,10 +1,10 @@
-import {Component, Input, Output, EventEmitter, ElementRef, ViewChild, OnDestroy, OnInit} from "@angular/core";
-import {NavigationExtras} from "@angular/router/src/router";
-import {Router, ActivatedRoute} from "@angular/router";
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, OnDestroy, OnInit } from "@angular/core";
+import { NavigationExtras } from "@angular/router/src/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
-    selector: "route-modal",
-    template: `
+  selector: "route-modal",
+  template: `
 <div class="modal route-modal" 
      tabindex="-1"
      role="dialog"
@@ -35,140 +35,140 @@ import {Router, ActivatedRoute} from "@angular/router";
 })
 export class RouteModal implements OnInit, OnDestroy {
 
-    // -------------------------------------------------------------------------
-    // Inputs
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Inputs
+  // -------------------------------------------------------------------------
 
-    @Input()
-    public cancelUrl: any[];
+  @Input()
+  public cancelUrl: any[];
 
-    @Input()
-    public cancelUrlExtras: { relative: boolean } & NavigationExtras;
+  @Input()
+  public cancelUrlExtras: { relative: boolean } & NavigationExtras;
 
-    @Input()
-    public modalClass: string;
+  @Input()
+  public modalClass: string;
 
-    @Input()
-    public closeOnEscape: boolean = true;
+  @Input()
+  public closeOnEscape: boolean = true;
 
-    @Input()
-    public closeOnOutsideClick: boolean = true;
+  @Input()
+  public closeOnOutsideClick: boolean = true;
 
-    @Input()
-    public title: string;
+  @Input()
+  public title: string;
 
-    @Input()
-    public hideCloseButton = false;
+  @Input()
+  public hideCloseButton = false;
 
-    @Input()
-    public cancelButtonLabel: string;
+  @Input()
+  public cancelButtonLabel: string;
 
-    @Input()
-    public submitButtonLabel: string;
+  @Input()
+  public submitButtonLabel: string;
 
-    @Input()
-    public backdrop:boolen = true;
+  @Input()
+  public backdrop: boolean = true;
 
-    // -------------------------------------------------------------------------
-    // Outputs
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Outputs
+  // -------------------------------------------------------------------------
 
-    @Output()
-    public onOpen = new EventEmitter(false);
+  @Output()
+  public onOpen = new EventEmitter(false);
 
-    @Output()
-    public onClose = new EventEmitter(false);
+  @Output()
+  public onClose = new EventEmitter(false);
 
-    @Output()
-    public onSubmit = new EventEmitter(false);
+  @Output()
+  public onSubmit = new EventEmitter(false);
 
-    // -------------------------------------------------------------------------
-    // Private properties
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Private properties
+  // -------------------------------------------------------------------------
 
-    @ViewChild("modalRoot")
-    public modalRoot: ElementRef;
+  @ViewChild("modalRoot")
+  public modalRoot: ElementRef;
 
-    public isOpened = false;
+  public isOpened = false;
 
-    private backdropElement: HTMLElement;
+  private backdropElement: HTMLElement;
 
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Constructor
+  // -------------------------------------------------------------------------
 
-    constructor(private router: Router,
-                private activatedRoute: ActivatedRoute) {
-        this.createBackDrop();
-    }
+  constructor(private router: Router,
+    private activatedRoute: ActivatedRoute) {
+    this.createBackDrop();
+  }
 
-    // -------------------------------------------------------------------------
-    // Lifecycle Methods
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Lifecycle Methods
+  // -------------------------------------------------------------------------
 
-    ngOnInit() {
-        this.open();
-    }
+  ngOnInit() {
+    this.open();
+  }
 
-    ngOnDestroy() {
-        document.body.className = document.body.className.replace(/modal-open\b/, "");
-        if (this.backdropElement && this.backdropElement.parentNode === document.body)
-            document.body.removeChild(this.backdropElement);
-    }
+  ngOnDestroy() {
+    document.body.className = document.body.className.replace(/modal-open\b/, "");
+    if (this.backdropElement && this.backdropElement.parentNode === document.body)
+      document.body.removeChild(this.backdropElement);
+  }
 
-    // -------------------------------------------------------------------------
-    // Public Methods
-    // -------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Public Methods
+  // -------------------------------------------------------------------------
 
-    open(...args: any[]) {
-        if (this.isOpened)
-            return;
-        
-        this.isOpened = true;
-        this.onOpen.emit(args);
-        document.body.appendChild(this.backdropElement);
-        window.setTimeout(() => this.modalRoot.nativeElement.focus(), 0);
-        document.body.className += " modal-open";
-    }
+  open(...args: any[]) {
+    if (this.isOpened)
+      return;
 
-    close(...args: any[]) {
-        if (!this.isOpened)
-            return;
+    this.isOpened = true;
+    this.onOpen.emit(args);
+    document.body.appendChild(this.backdropElement);
+    window.setTimeout(() => this.modalRoot.nativeElement.focus(), 0);
+    document.body.className += " modal-open";
+  }
 
-        this.isOpened = false;
-        this.onClose.emit(args);
-        document.body.className = document.body.className.replace(/modal-open\b/, "");
+  close(...args: any[]) {
+    if (!this.isOpened)
+      return;
 
-        if (this.cancelUrl) {
-            let navigationExtras: NavigationExtras = { };
-            if (this.cancelUrlExtras) {
-                if (this.cancelUrlExtras.relative) {
-                    navigationExtras.relativeTo = this.activatedRoute;
-                }
-                navigationExtras = (Object as any).assign(navigationExtras, this.cancelUrlExtras);
-            }
-            this.router.navigate(this.cancelUrl, navigationExtras);
+    this.isOpened = false;
+    this.onClose.emit(args);
+    document.body.className = document.body.className.replace(/modal-open\b/, "");
 
-        } else {
-            window.history.back();
+    if (this.cancelUrl) {
+      let navigationExtras: NavigationExtras = {};
+      if (this.cancelUrlExtras) {
+        if (this.cancelUrlExtras.relative) {
+          navigationExtras.relativeTo = this.activatedRoute;
         }
-    }
+        navigationExtras = (Object as any).assign(navigationExtras, this.cancelUrlExtras);
+      }
+      this.router.navigate(this.cancelUrl, navigationExtras);
 
-    // -------------------------------------------------------------------------
-    // Private Methods
-    // -------------------------------------------------------------------------
-
-    public preventClosing(event: MouseEvent) {
-        event.stopPropagation();
+    } else {
+      window.history.back();
     }
+  }
 
-    private createBackDrop() {
-        this.backdropElement = document.createElement("div");
-        this.backdropElement.classList.add("fade");
-        this.backdropElement.classList.add("in");
-        if(this.backdrop) {
-            this.backdropElement.classList.add("modal-backdrop");
-        }
+  // -------------------------------------------------------------------------
+  // Private Methods
+  // -------------------------------------------------------------------------
+
+  public preventClosing(event: MouseEvent) {
+    event.stopPropagation();
+  }
+
+  private createBackDrop() {
+    this.backdropElement = document.createElement("div");
+    this.backdropElement.classList.add("fade");
+    this.backdropElement.classList.add("in");
+    if (this.backdrop) {
+      this.backdropElement.classList.add("modal-backdrop");
     }
+  }
 
 }
