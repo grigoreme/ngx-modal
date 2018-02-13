@@ -30,7 +30,7 @@ export class ModalFooter { }
      [ngStyle]="{ display: isOpened ? 'block' : 'none' }"
      (click)="closeOnOutsideClick ? close() : 0"
      >
-    <div class="modal-dialog {{ modelClass }}" [ngStyle]="modalStyle" (click)="preventClosing($event)">
+    <div [class]="'modal-dialog ' + modalClass" [ngStyle]="modalStyle" (click)="preventClosing($event)">
         <div class="modal-content" tabindex="0" *ngIf="isOpened">
             <ng-content select="modal-header"></ng-content>
             <div class="modal-body">
